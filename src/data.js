@@ -1,3 +1,5 @@
+// https://coinstats.app/api-docs/
+// https://coinstats.app/
 export const cryptoData = {
   result: [
     {
@@ -607,7 +609,7 @@ export const cryptoData = {
     hasPreviousPage: false,
     hasNextPage: true,
   },
-}
+};
 
 export const cryptoAssets = [
   {
@@ -622,4 +624,10 @@ export const cryptoAssets = [
     price: 2400,
     date: new Date(),
   },
-]
+  {
+    id: 'dogecoin',
+    price: 0.07,
+    amount: 550,
+    date: new Date(),
+  },
+];
