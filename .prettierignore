@@ -1,0 +1,19 @@
+# Node
+node_modules
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store
+
+# Logs
+npm-debug.log*
+*.log
+
+# Build output
+dist
+build
+coverage
+
+# Minified files
+*.min.js
