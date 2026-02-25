@@ -1,7 +1,7 @@
 import { Layout, Card, Statistic, List, Typography, Spin, Tag } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { faceFetchCrypto, FetchAssets } from '@/Api/Api';
+import { fakeFetchCrypto, fetchAssets } from '@/Api/Api';
 import { capitalize, percentDifference } from '@/utils/utils';
 
 const siderStyle = {
@@ -17,8 +17,8 @@ export default function AppSider() {
   useEffect(() => {
     async function preload() {
       setLoading(true);
-      const { result } = await faceFetchCrypto();
-      const assets = await FetchAssets();
+      const { result } = await fakeFetchCrypto();
+      const assets = await fetchAssets();
 
       setAssets(
         assets.map((asset) => {

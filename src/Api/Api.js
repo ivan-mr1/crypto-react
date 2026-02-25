@@ -1,17 +1,11 @@
 import { cryptoData, cryptoAssets } from '../data';
 
-export function faceFetchCrypto() {
+const simulateRequest = (data, delay = 2000) => {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(cryptoData);
-    }, 2);
+    setTimeout(() => resolve(data), delay);
   });
-}
+};
 
-export function FetchAssets() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(cryptoAssets);
-    }, 2);
-  });
-}
+export const fakeFetchCrypto = () => simulateRequest(cryptoData);
+
+export const fetchAssets = () => simulateRequest(cryptoAssets);
