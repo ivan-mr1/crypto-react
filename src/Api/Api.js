@@ -1,6 +1,6 @@
 import { cryptoData, cryptoAssets } from '../data';
 
-const simulateRequest = (data, delay = 2000) => {
+const simulateRequest = (data, delay = 1000) => {
   return new Promise((resolve) => {
     setTimeout(() => resolve(data), delay);
   });
