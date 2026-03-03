@@ -1,3 +1,136 @@
+import { useState } from 'react';
+import {
+  Select,
+  Space,
+  Typography,
+  Flex,
+  Divider,
+  Form,
+  Button,
+  InputNumber,
+  DatePicker,
+} from 'antd';
+import { useCrypto } from '@/context/cryptoContext';
+
+const validateMessages = {
+  required: '${label} is required!',
+  types: {
+    number: '${label} is not a valid number!',
+  },
+  number: {
+    range: '${label} must be between ${min} and ${max}',
+  },
+};
+
 export default function AddAssetForm() {
-  return <form>Form asset</form>;
+  const [form] = Form.useForm();
+  const { crypto } = useCrypto();
+  const [coin, setCoin] = useState(null);
+
+  if (!coin) {
+    return (
+      <Select
+        style={{ width: '100%' }}
+        onSelect={(v) => setCoin(crypto.find((c) => c.id === v))}
+        placeholder="Please select your coin."
+        options={crypto.map((coin) => ({
+          label: coin.name,
+          value: coin.id,
+          icon: coin.icon,
+        }))}
+        optionRender={(option) => (
+          <Space>
+            <img
+              style={{ width: 20 }}
+              src={option.data.icon}
+              alt={option.data.label}
+            />{' '}
+            {option.data.label}
+          </Space>
+        )}
+      />
+    );
+  }
+
+  const onFinish = (values) => {
+    console.log('Success:', values);
+  };
+
+  function handleAmountChange(value) {
+    const price = form.getFieldValue('price');
+    form.setFieldsValue({
+      total: +(value * price).toFixed(2),
+    });
+  }
+
+  function handlePriceChange(value) {
+    const amount = form.getFieldValue('amount');
+    form.setFieldsValue({
+      total: +(value * amount).toFixed(2),
+    });
+  }
+
+  return (
+    <Form
+      form={form}
+      validateMessages={validateMessages}
+      name="basic"
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 10 }}
+      style={{ maxWidth: 600 }}
+      initialValues={{
+        price: +coin.price.toFixed(2),
+      }}
+      onFinish={onFinish}
+    >
+      <Flex align="center">
+        <img
+          src={coin.icon}
+          alt={coin.name}
+          style={{ width: 40, marginRight: 10 }}
+        />
+        <Typography.Title level={2} style={{ margin: 0 }}>
+          {coin.name}
+        </Typography.Title>
+      </Flex>
+
+      <Divider />
+
+      <Form.Item
+        label="Amount"
+        name="amount"
+        rules={[
+          {
+            required: true,
+            type: 'number',
+            min: 0,
+          },
+        ]}
+      >
+        <InputNumber
+          placeholder="Enter coin amount"
+          onChange={handleAmountChange}
+          style={{ width: '100%' }}
+        />
+      </Form.Item>
+
+      <Form.Item label="Price" name="price">
+        <InputNumber onChange={handlePriceChange} style={{ width: '100%' }} />
+      </Form.Item>
+
+      <Form.Item label="Date and time" name="date">
+        <DatePicker showTime style={{ width: '100%' }} />
+      </Form.Item>
+
+      <Form.Item label="Total" name="total">
+        <InputNumber disabled style={{ width: '100%' }} />
+      </Form.Item>
+
+      <Form.Item label={null}>
+        <Button type="primary" htmlType="submit">
+          Add Asset
+        </Button>
+      </Form.Item>
+    </Form>
+  );
 }
