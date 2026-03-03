@@ -85,7 +85,7 @@ export default function AppHeader() {
         open={drawer}
         destroyOnHidden
       >
-        <AddAssetForm />
+        <AddAssetForm onClose={() => setDrawer(false)} />
       </Drawer>
     </Layout.Header>
   );
