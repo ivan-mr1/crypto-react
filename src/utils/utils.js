@@ -31,3 +31,5 @@ export const statusColor = {
   negative: 'red',
   neutral: 'default',
 };
+
+export const getColor = (value) => statusColor[getChangeStatus(value)];
