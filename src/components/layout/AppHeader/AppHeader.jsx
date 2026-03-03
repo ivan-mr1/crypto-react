@@ -18,7 +18,7 @@ export default function AppHeader() {
   const [select, setSelect] = useState(false);
   const [coin, setCoin] = useState(null);
   const [modal, setModal] = useState(false);
-  const [drawer, setDrawer] = useState(true);
+  const [drawer, setDrawer] = useState(false);
   const { crypto } = useCrypto();
 
   useEffect(() => {
@@ -40,11 +40,6 @@ export default function AppHeader() {
     <Layout.Header style={headerStyle}>
       <Select
         style={{ width: 250 }}
-        // placeholder="Please select your current mood."
-        // defaultValue={['happy']}
-        // onChange={(value) => {
-        //   console.log(`selected ${value}`);
-        // }}
         open={select}
         onSelect={handleSelect}
         onClick={() => setSelect((prev) => !prev)}
@@ -62,10 +57,6 @@ export default function AppHeader() {
               alt={option.data.label}
             />{' '}
             {option.data.label}
-            {/* <span role="img" aria-label={option.data.label}>
-              {option.data.emoji}
-            </span>
-            {`${option.data.label} (${option.data.desc})`} */}
           </Space>
         )}
       />
@@ -80,7 +71,6 @@ export default function AppHeader() {
       <Drawer
         size={600}
         title="Add Asset"
-        closable={{ 'aria-label': 'Close Button' }}
         onClose={() => setDrawer(false)}
         open={drawer}
         destroyOnHidden
