@@ -78,7 +78,7 @@ export default function AppHeader() {
       </Modal>
 
       <Drawer
-        width={600}
+        size={600}
         title="Add Asset"
         closable={{ 'aria-label': 'Close Button' }}
         onClose={() => setDrawer(false)}
