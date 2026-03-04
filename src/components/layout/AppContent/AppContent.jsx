@@ -1,7 +1,7 @@
 import { useCrypto } from '@/context/cryptoContext';
 import { Layout, Typography } from 'antd';
 import PortfolioChart from '../PortfolioChart/PortfolioChart';
-import AssetsTable from '../AssetstTable/AssetsTable';
+import AssetsTable from '../AssetsTable/AssetsTable';
 
 const contentStyle = {
   textAlign: 'center',
