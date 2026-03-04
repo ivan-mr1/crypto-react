@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
 
   return {
-    base: isProd ? '/name-repo/' : '/',
+    // base: isProd ? '/name-repo/' : '/',
     plugins: [react()],
     resolve: {
       alias: {
