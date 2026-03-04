@@ -6,7 +6,8 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
 
   return {
-    // base: isProd ? '/name-repo/' : '/',
+    // base: isProd ? '/name-repo/' : '/',// only deploy github
+    base: '/', // deploy versel
     plugins: [react()],
     resolve: {
       alias: {
