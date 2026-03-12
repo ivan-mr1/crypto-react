@@ -19,17 +19,17 @@ export default function AppContent() {
     return acc;
   }, {});
 
+  const totalPortfolio = assets
+    .reduce(
+      (sum, asset) => sum + asset.amount * (cryptoPriceMap[asset.id] || 0),
+      0,
+    )
+    .toFixed(2);
+
   return (
     <Layout.Content style={contentStyle}>
       <Typography.Title level={3} style={{ textAlign: 'left', color: '#fff' }}>
-        Portfolio:{' '}
-        {assets
-          .map((asset) => {
-            return asset.amount * cryptoPriceMap[asset.id];
-          })
-          .reduce((acc, v) => (acc += v), 0)
-          .toFixed(2)}
-        $
+        Portfolio: {totalPortfolio}$
       </Typography.Title>
       <PortfolioChart />
       <AssetsTable />
