@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import {
   Select,
   Space,
@@ -14,12 +14,8 @@ import CoinInfo from '../layout/CoinInfo/CoinInfo';
 
 const validateMessages = {
   required: '${label} is required!',
-  types: {
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
+  types: { number: '${label} is not a valid number!' },
+  number: { range: '${label} must be between ${min} and ${max}' },
 };
 
 export default function AddAssetForm({ onClose }) {
@@ -27,16 +23,16 @@ export default function AddAssetForm({ onClose }) {
   const { crypto, addAsset } = useCrypto();
   const [coin, setCoin] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const assetRef = useRef();
+  const [submittedAsset, setSubmittedAsset] = useState(null);
 
-  if (submitted) {
+  if (submitted && submittedAsset) {
     return (
       <Result
         status="success"
         title="New Asset Added"
-        // subTitle={`Added ${assetRef.current.amount} of ${coin.name} by price ${assetRef.current.price}`}
+        subTitle={`Added ${submittedAsset.amount} of ${coin.name} by price ${submittedAsset.price}`}
         extra={[
-          <Button type="primary" key="console" onClick={onClose}>
+          <Button type="primary" key="close" onClick={onClose}>
             Close
           </Button>,
         ]}
@@ -48,12 +44,12 @@ export default function AddAssetForm({ onClose }) {
     return (
       <Select
         style={{ width: '100%' }}
-        onSelect={(v) => setCoin(crypto.find((c) => c.id === v))}
         placeholder="Please select your coin."
-        options={crypto.map((coin) => ({
-          label: coin.name,
-          value: coin.id,
-          icon: coin.icon,
+        onSelect={(v) => setCoin(crypto.find((c) => c.id === v))}
+        options={crypto.map((c) => ({
+          label: c.name,
+          value: c.id,
+          icon: c.icon,
         }))}
         optionRender={(option) => (
           <Space>
@@ -61,7 +57,7 @@ export default function AddAssetForm({ onClose }) {
               style={{ width: 20 }}
               src={option.data.icon}
               alt={option.data.label}
-            />{' '}
+            />
             {option.data.label}
           </Space>
         )}
@@ -69,32 +65,23 @@ export default function AddAssetForm({ onClose }) {
     );
   }
 
+  const updateTotal = () => {
+    const amount = form.getFieldValue('amount') || 0;
+    const price = form.getFieldValue('price') || 0;
+    form.setFieldsValue({ total: +(amount * price).toFixed(2) });
+  };
+
   const onFinish = (values) => {
-    console.log('Success:', values);
     const newAsset = {
       id: coin.id,
       amount: values.amount,
       price: values.price,
-      date: values.date?.$d ?? new Date(),
+      date: values.date?.toDate() ?? new Date(),
     };
-    assetRef.current = newAsset;
+    setSubmittedAsset(newAsset);
     setSubmitted(true);
     addAsset(newAsset);
   };
-
-  function handleAmountChange(value) {
-    const price = form.getFieldValue('price');
-    form.setFieldsValue({
-      total: +(value * price).toFixed(2),
-    });
-  }
-
-  function handlePriceChange(value) {
-    const amount = form.getFieldValue('amount');
-    form.setFieldsValue({
-      total: +(value * amount).toFixed(2),
-    });
-  }
 
   return (
     <Form
@@ -104,33 +91,26 @@ export default function AddAssetForm({ onClose }) {
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 10 }}
       style={{ maxWidth: 600 }}
-      initialValues={{
-        price: +coin.price.toFixed(2),
-      }}
+      initialValues={{ price: coin?.price ? +coin.price.toFixed(2) : 0 }}
       onFinish={onFinish}
     >
       <CoinInfo coin={coin} />
       <Divider />
+
       <Form.Item
         label="Amount"
         name="amount"
-        rules={[
-          {
-            required: true,
-            type: 'number',
-            min: 0,
-          },
-        ]}
+        rules={[{ required: true, type: 'number', min: 0 }]}
       >
         <InputNumber
           placeholder="Enter coin amount"
-          onChange={handleAmountChange}
           style={{ width: '100%' }}
+          onChange={updateTotal}
         />
       </Form.Item>
 
       <Form.Item label="Price" name="price">
-        <InputNumber onChange={handlePriceChange} style={{ width: '100%' }} />
+        <InputNumber style={{ width: '100%' }} onChange={updateTotal} />
       </Form.Item>
 
       <Form.Item label="Date and time" name="date">
